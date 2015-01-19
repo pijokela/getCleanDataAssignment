@@ -41,7 +41,6 @@ actNumberToLabel <- setNames(activityLabels$V2, activityLabels$V1)
 # after the cleanup we call merge to combine them
 tidyDataset <- function(df) {
   # Filter factors so only mean and std factors remain:
-
   names(df) <- dataHeadings
 
   n <- names(df)
@@ -49,7 +48,6 @@ tidyDataset <- function(df) {
   df2 <- df[, n]
 
   # Clean up special characters from data headings:
-
   n <- names(df2)
   n <- cleanUpNameVect(n)
   names(df2) <- n

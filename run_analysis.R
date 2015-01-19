@@ -3,6 +3,8 @@
 library(dplyr)
 
 DATA_DIR <- "./UCI HAR Dataset"
+# A function for loading the UCI HAR Dataset datafiles in to
+# data frames.
 loadCsv <- function(fileName) {
   fileName <- paste(DATA_DIR, "/", fileName, sep = "")
   read.csv(fileName, header = FALSE, sep = "")
@@ -19,8 +21,7 @@ isMeanOrStdVect <- Vectorize(isMeanOrStd)
 # Remove - and () characters from factor name to
 # make it more readable
 cleanUpName <- function(dirtyName) {
-  dirtyName <- gsub("mean", "Mean", dirtyName)
-  dirtyName <- gsub("std", "Std", dirtyName)
+  dirtyName <- tolower(dirtyName)
   gsub("[\\(\\)-]", "", dirtyName)
 }
 
@@ -81,11 +82,15 @@ testData$subject <- testSubjects$V1
 allData <- merge(trainData, testData, all = TRUE)
 
 # Write tidy dataset to file:
-
-write.csv(allData, file="tidyData.csv", row.names=FALSE)
+# write.csv(allData, file="tidyData.csv", row.names=FALSE)
 
 # Calculate average of all factors:
 
 library(plyr)
+# Group data by columns activity and subject. For all the numeric columns
+# calculate the mean of the values:
 summaryData <- ddply(allData, .(activity, subject), numcolwise(mean))
+
+# Write the end result in to summary.csv:
+
 write.csv(summaryData, file="summary.csv", row.names=FALSE)
